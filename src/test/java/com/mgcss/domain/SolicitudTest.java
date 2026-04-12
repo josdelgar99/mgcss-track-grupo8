@@ -150,4 +150,31 @@ public class SolicitudTest {
 
         assertEquals("Nueva descripcion", solicitud.getDescripcion());
     }
+
+    @Test
+    void noDebePermitirReabrirSolicitudNoCerrada() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitudAbierta = new Solicitud(1L, cliente, "Abierta", EstadoSolicitud.ABIERTA);
+        Solicitud solicitudEnProceso = new Solicitud(2L, cliente, "En proceso", EstadoSolicitud.EN_PROCESO);
+
+        assertThrows(IllegalStateException.class, solicitudAbierta::reabrir);
+        assertThrows(IllegalStateException.class, solicitudEnProceso::reabrir);
+
+        assertEquals(EstadoSolicitud.ABIERTA, solicitudAbierta.getEstado());
+        assertEquals(EstadoSolicitud.EN_PROCESO, solicitudEnProceso.getEstado());
+    }
+
+    @Test
+    void debePermitirReabrirSolicitudCerrada() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Cerrada", EstadoSolicitud.EN_PROCESO);
+        Tecnico tecnico = new Tecnico(1L, "Luis", "Hardware", true);
+
+        solicitud.asignarTecnico(tecnico);
+        solicitud.cerrar();
+        solicitud.reabrir();
+
+        assertEquals(EstadoSolicitud.ABIERTA, solicitud.getEstado());
+        assertNull(solicitud.getFechaCierre());
+    }
 }

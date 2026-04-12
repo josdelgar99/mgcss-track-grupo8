@@ -92,5 +92,13 @@ public class Solicitud {
 	    }
 	    this.tecnicoAsignado = tecnico;
 	}
+	
+	public void reabrir() {
+	    if (estado != EstadoSolicitud.CERRADA) {
+	        throw new IllegalStateException("Solo se puede reabrir una solicitud cerrada");
+	    }
+	    estado = EstadoSolicitud.ABIERTA;
+	    fechaCierre = null;
+	}
 
 }
