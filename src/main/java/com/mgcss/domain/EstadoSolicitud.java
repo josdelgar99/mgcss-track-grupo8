@@ -1,5 +1,7 @@
 package com.mgcss.domain;
 
-public class EstadoSolicitud {
-
+public enum EstadoSolicitud {
+	ABIERTA,
+	EN_PROCESO,
+	CERRADA
 }

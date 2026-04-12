@@ -20,7 +20,5 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Build and Analize
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Madro13_mgcss-track-grupo8
+    - name: Build and Verify with Maven
+      run: mvn clean verify
