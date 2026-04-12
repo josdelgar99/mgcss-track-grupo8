@@ -15,13 +15,13 @@ public class Solicitud {
 	public Solicitud() {}
 	
 	public Solicitud(Long id, Cliente cliente, String descripcion, EstadoSolicitud estado) {
-		if (descripcion == null || descripcion.isEmpty()) {
+		if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new IllegalArgumentException("La descripción es obligatoria");
         }
 		
 		this.id = id;
 		this.cliente = cliente;
-		this.descripcion = descripcion;
+		this.descripcion = descripcion.trim();
 		this.estado = estado;
 		this.fechaCreacion = new Date();
 		this.fechaCierre = null;
@@ -58,6 +58,10 @@ public class Solicitud {
 	public Tecnico getTecnicoAsignado() {
 		return tecnicoAsignado;
 	}
+	
+	public boolean tienePrioridad() {
+        return cliente != null && cliente.getEstado() == EstadoCliente.PREMIUM;
+    }
 	
 	public void cerrar() {
 		if (estado != EstadoSolicitud.EN_PROCESO) {
