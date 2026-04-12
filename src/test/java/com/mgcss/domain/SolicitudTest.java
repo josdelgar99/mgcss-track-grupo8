@@ -104,4 +104,17 @@ public class SolicitudTest {
         assertThrows(IllegalStateException.class, () -> solicitud.asignarTecnico(tecnico));
         assertNull(solicitud.getTecnicoAsignado());
     }
+    
+    @Test
+    void noDebePermitirReasignarTecnicoSiYaTieneUno() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "No deja escribir", EstadoSolicitud.ABIERTA);
+        Tecnico tecnico1 = new Tecnico(1L, "Luis", "Hardware", true);
+        Tecnico tecnico2 = new Tecnico(2L, "Ana", "Software", true);
+
+        solicitud.asignarTecnico(tecnico1);
+
+        assertThrows(IllegalStateException.class, () -> solicitud.asignarTecnico(tecnico2));
+        assertEquals(tecnico1, solicitud.getTecnicoAsignado());
+    }
 }

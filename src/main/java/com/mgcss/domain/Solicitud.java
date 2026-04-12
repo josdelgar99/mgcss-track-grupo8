@@ -72,16 +72,19 @@ public class Solicitud {
 	}
 	
 	public void asignarTecnico(Tecnico tecnico) {
-		if (tecnico == null) {
-			throw new IllegalArgumentException("El técnico no puede ser null");
-		}
-		if (!tecnico.esActivo()) {
-			throw new IllegalStateException("Sólo se puede asignar un técnico");
-		}
-		if (estado == EstadoSolicitud.CERRADA) {
-			throw new IllegalStateException("No se puede asignar un técnico a una solicitud cerrada");
-		}
-		this.tecnicoAsignado = tecnico;
+	    if (tecnico == null) {
+	        throw new IllegalArgumentException("El técnico no puede ser null");
+	    }
+	    if (tecnicoAsignado != null) {
+	        throw new IllegalStateException("La solicitud ya tiene un técnico asignado");
+	    }
+	    if (!tecnico.esActivo()) {
+	        throw new IllegalStateException("Sólo se puede asignar un técnico");
+	    }
+	    if (estado == EstadoSolicitud.CERRADA) {
+	        throw new IllegalStateException("No se puede asignar un técnico a una solicitud cerrada");
+	    }
+	    this.tecnicoAsignado = tecnico;
 	}
 
 }
