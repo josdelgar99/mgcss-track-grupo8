@@ -80,6 +80,14 @@ public class SolicitudTest {
 
         assertFalse(solicitud.tienePrioridad());
     }
+    
+    @Test
+    void noDebePermitirCrearSolicitudSinEstado() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new Solicitud(1L, cliente, "Fallo en el teclado", null));
+    }
 
     @Test
     void noDebePermitirCrearSolicitudSinDescripcion() {

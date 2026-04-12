@@ -21,6 +21,9 @@ public class Solicitud {
 		if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new IllegalArgumentException("La descripción es obligatoria");
         }
+		if (estado == null) {
+		    throw new IllegalArgumentException("El estado no puede ser null");
+		}
 		
 		this.id = id;
 		this.cliente = cliente;
