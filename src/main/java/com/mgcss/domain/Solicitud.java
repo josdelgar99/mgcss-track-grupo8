@@ -40,7 +40,10 @@ public class Solicitud {
 	}
 	
 	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+		if (descripcion == null || descripcion.trim().isEmpty()) {
+	        throw new IllegalArgumentException("La descripción es obligatoria");
+	    }
+	    this.descripcion = descripcion.trim();
 	}
 	
 	public EstadoSolicitud getEstado() {
@@ -64,11 +67,14 @@ public class Solicitud {
     }
 	
 	public void cerrar() {
-		if (estado != EstadoSolicitud.EN_PROCESO) {
-			throw new IllegalStateException("Sólo se podría cerrar la solicitud que está EN_PROCESO");
-		}
-		estado = EstadoSolicitud.CERRADA;
-		fechaCierre = new Date();
+	    if (estado != EstadoSolicitud.EN_PROCESO) {
+	        throw new IllegalStateException("Sólo se podría cerrar la solicitud que está EN_PROCESO");
+	    }
+	    if (tecnicoAsignado == null) {
+	        throw new IllegalStateException("No se puede cerrar una solicitud sin técnico asignado");
+	    }
+	    estado = EstadoSolicitud.CERRADA;
+	    fechaCierre = new Date();
 	}
 	
 	public void asignarTecnico(Tecnico tecnico) {

@@ -16,10 +16,22 @@ public class SolicitudTest {
     }
 
     @Test
-    void debePermitirCerrarSolicitudSiEstaEnProceso() {
+    void noDebePermitirCerrarSolicitudEnProcesoSinTecnicoAsignado() {
         Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
         Solicitud solicitud = new Solicitud(1L, cliente, "Fallo en el teclado", EstadoSolicitud.EN_PROCESO);
 
+        assertThrows(IllegalStateException.class, solicitud::cerrar);
+        assertEquals(EstadoSolicitud.EN_PROCESO, solicitud.getEstado());
+        assertNull(solicitud.getFechaCierre());
+    }
+
+    @Test
+    void debePermitirCerrarSolicitudSiEstaEnProcesoYTieneTecnicoAsignado() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Fallo en el teclado", EstadoSolicitud.EN_PROCESO);
+        Tecnico tecnico = new Tecnico(1L, "Luis", "Hardware", true);
+
+        solicitud.asignarTecnico(tecnico);
         solicitud.cerrar();
 
         assertEquals(EstadoSolicitud.CERRADA, solicitud.getEstado());
@@ -72,19 +84,21 @@ public class SolicitudTest {
     }
 
     @Test
-    void noDebePermitirCrearSolicitudConDescripcionVacia() {
+    void noDebePermitirCambiarDescripcionAVacia() {
         Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> new Solicitud(1L, cliente, "", EstadoSolicitud.ABIERTA));
+        assertThrows(IllegalArgumentException.class, () -> solicitud.setDescripcion(""));
+        assertEquals("Descripcion inicial", solicitud.getDescripcion());
     }
 
     @Test
-    void noDebePermitirCrearSolicitudConDescripcionSoloEspacios() {
+    void noDebePermitirCambiarDescripcionASoloEspacios() {
         Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> new Solicitud(1L, cliente, "   ", EstadoSolicitud.ABIERTA));
+        assertThrows(IllegalArgumentException.class, () -> solicitud.setDescripcion("   "));
+        assertEquals("Descripcion inicial", solicitud.getDescripcion());
     }
 
     @Test
@@ -104,7 +118,7 @@ public class SolicitudTest {
         assertThrows(IllegalStateException.class, () -> solicitud.asignarTecnico(tecnico));
         assertNull(solicitud.getTecnicoAsignado());
     }
-    
+
     @Test
     void noDebePermitirReasignarTecnicoSiYaTieneUno() {
         Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
@@ -116,5 +130,24 @@ public class SolicitudTest {
 
         assertThrows(IllegalStateException.class, () -> solicitud.asignarTecnico(tecnico2));
         assertEquals(tecnico1, solicitud.getTecnicoAsignado());
+    }
+
+    @Test
+    void noDebePermitirCambiarDescripcionANull() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
+
+        assertThrows(IllegalArgumentException.class, () -> solicitud.setDescripcion(null));
+        assertEquals("Descripcion inicial", solicitud.getDescripcion());
+    }
+
+    @Test
+    void debePermitirCambiarDescripcionValida() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
+
+        solicitud.setDescripcion("Nueva descripcion");
+
+        assertEquals("Nueva descripcion", solicitud.getDescripcion());
     }
 }
