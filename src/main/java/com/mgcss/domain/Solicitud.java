@@ -15,6 +15,9 @@ public class Solicitud {
 	public Solicitud() {}
 	
 	public Solicitud(Long id, Cliente cliente, String descripcion, EstadoSolicitud estado) {
+		if (cliente == null) {
+	        throw new IllegalArgumentException("El cliente no puede ser null");
+	    }
 		if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new IllegalArgumentException("La descripción es obligatoria");
         }

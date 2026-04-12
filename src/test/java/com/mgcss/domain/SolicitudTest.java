@@ -5,6 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class SolicitudTest {
+	
+	@Test
+	void noDebePermitirCrearSolicitudSinCliente() {
+	    assertThrows(IllegalArgumentException.class,
+	            () -> new Solicitud(1L, null, "Fallo en el teclado", EstadoSolicitud.ABIERTA));
+	}
 
     @Test
     void noDebePermitirCerrarSolicitudSiNoEstaEnProceso() {
