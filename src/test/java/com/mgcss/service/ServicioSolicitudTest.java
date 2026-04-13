@@ -85,4 +85,37 @@ public class ServicioSolicitudTest {
         verify(repository).findById(1L);
         verify(repository).save(solicitud);
     }
+    
+    @Test
+    void debeCrearSolicitudAbiertaYGuardarEnRepositorio() {
+        SolicitudRepository repository = mock(SolicitudRepository.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repository);
+        
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud esperada = new Solicitud(1L, cliente, "Fallo disco", EstadoSolicitud.ABIERTA);
+        
+        when(repository.save(any(Solicitud.class))).thenReturn(esperada);
+        
+        Solicitud resultado = servicio.crearSolicitud(1L, cliente, "Fallo disco");
+        
+        assertEquals(EstadoSolicitud.ABIERTA, resultado.getEstado());
+        verify(repository).save(argThat(s -> s.getDescripcion().equals("Fallo disco")));
+    }
+    
+    @Test
+    void debeReabrirSolicitudCerradaYGuardar() {
+    	SolicitudRepository repository = mock(SolicitudRepository.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repository);
+        
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Arreglado", EstadoSolicitud.CERRADA);
+        
+        when(repository.findById(1L)).thenReturn(Optional.of(solicitud));
+        when(repository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Solicitud resultado = servicio.reabrirSolicitud(1L);
+        
+        assertEquals(EstadoSolicitud.ABIERTA, resultado.getEstado());
+        verify(repository).save(solicitud);
+    }
 }
