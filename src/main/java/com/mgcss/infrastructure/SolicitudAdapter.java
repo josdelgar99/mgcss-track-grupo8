@@ -1,11 +1,8 @@
 package com.mgcss.infrastructure;
 
 import java.util.Optional;
-
 import org.springframework.stereotype.Component;
-
-import com.mgcss.domain.Solicitud;
-import com.mgcss.domain.SolicitudRepository;
+import com.mgcss.domain.*;
 
 @Component
 public class SolicitudAdapter implements SolicitudRepository {
@@ -26,21 +23,21 @@ public class SolicitudAdapter implements SolicitudRepository {
         SolicitudEntity saved = jpaRepository.save(entity);
 
         return new Solicitud(
-                saved.getId(),
-                null,
-                saved.getDescripcion(),
-                saved.getEstado()
+            saved.getId(),
+            new Cliente(0L, "Cliente dummy", "dummy@test.com", EstadoCliente.STANDARD),
+            saved.getDescripcion(),
+            saved.getEstado()
         );
     }
 
     @Override
     public Optional<Solicitud> findById(Long id) {
         return jpaRepository.findById(id)
-                .map(entity -> new Solicitud(
-                        entity.getId(),
-                        null,
-                        entity.getDescripcion(),
-                        entity.getEstado()
-                ));
+            .map(entity -> new Solicitud(
+                entity.getId(),
+                new Cliente(0L, "Cliente dummy", "dummy@test.com", EstadoCliente.STANDARD),
+                entity.getDescripcion(),
+                entity.getEstado()
+            ));
     }
 }
