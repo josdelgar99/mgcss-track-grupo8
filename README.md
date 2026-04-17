@@ -3,7 +3,8 @@
 
 # mgcss-track-grupo8
 
-Hemos creado 3 ramas distintas:
+Actualmente tenemos 3 ramas distintas:
 
-- feature/estructura-inicial: Se creó para poder hacer el primer commit de la estructura del proyecto. El readme se actualiza desde aquí
+- main: es la rama principal del proyecto hacia la que hacemos merge con todos los cambios que se van implementando
+- feature/Estructura-Mockito: Implementación mas completa del proyecto actualmente, incluyendo los tests con Mockito
 - feature/workflow: Se creó para crear el build/test con el archivo .yml
