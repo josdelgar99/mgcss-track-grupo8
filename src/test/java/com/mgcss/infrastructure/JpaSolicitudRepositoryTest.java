@@ -2,6 +2,7 @@ package com.mgcss.infrastructure;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -10,6 +11,7 @@ import com.mgcss.domain.EstadoSolicitud;
 
 
 @DataJpaTest
+@Tag("integration")
 class JpaSolicitudRepositoryTest {
 
     @Autowired
