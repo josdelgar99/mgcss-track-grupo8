@@ -6,14 +6,14 @@ import com.mgcss.domain.Cliente;
 import com.mgcss.domain.EstadoSolicitud;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Tecnico;
-import com.mgcss.infrastructure.SolicitudRepository;
+import com.mgcss.domain.SolicitudRepository;
 
 public class ServicioSolicitud {
 
-    private final SolicitudRepository repositorioSolicitud;
+    private final SolicitudRepository repositorioSolicitud;	
 
-    public ServicioSolicitud(SolicitudRepository solicitudRepository) {
-        this.repositorioSolicitud = solicitudRepository;
+    public ServicioSolicitud(SolicitudRepository repositorioSolicitud) {
+        this.repositorioSolicitud = repositorioSolicitud;
     }
 
     public Solicitud crearSolicitud(Long id, Cliente cliente, String descripcion) {

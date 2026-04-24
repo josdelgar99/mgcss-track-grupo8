@@ -1,7 +1,6 @@
-package com.mgcss.infrastructure;
+package com.mgcss.domain;
 
 import java.util.Optional;
-import com.mgcss.domain.Solicitud;
 
 public interface SolicitudRepository {
     Solicitud save(Solicitud solicitud);
