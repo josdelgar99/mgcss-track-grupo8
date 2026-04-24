@@ -5,8 +5,6 @@ public class Tecnico {
 	private String nombre;
 	private String especialidad;
 	private boolean activo;
-	
-	public Tecnico() {};
 
 	public Tecnico(Long id, String nombre, String especialidad, boolean activo) {
 		super();

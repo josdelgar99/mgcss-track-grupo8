@@ -7,7 +7,6 @@ public class Cliente {
 	private String email;
 	private EstadoCliente estado;
 	
-	public Cliente() {};
 	
 	public Cliente (Long id, String nombre, String email, EstadoCliente estado) {
 		super();
