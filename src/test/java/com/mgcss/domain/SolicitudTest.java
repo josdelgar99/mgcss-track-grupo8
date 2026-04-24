@@ -3,8 +3,22 @@ package com.mgcss.domain;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-public class SolicitudTest {
+class SolicitudTest {
+	
+	@ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = { "   " })
+	void noDebePermitirCambiarDescripcionInvalida(String descripcionInvalida) {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
+
+        assertThrows(IllegalArgumentException.class, () -> solicitud.setDescripcion(descripcionInvalida));
+        assertEquals("Descripcion inicial", solicitud.getDescripcion());
+    }
 	
 	@Test
 	void noDebePermitirCrearSolicitudSinCliente() {
@@ -98,24 +112,6 @@ public class SolicitudTest {
     }
 
     @Test
-    void noDebePermitirCambiarDescripcionAVacia() {
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
-
-        assertThrows(IllegalArgumentException.class, () -> solicitud.setDescripcion(""));
-        assertEquals("Descripcion inicial", solicitud.getDescripcion());
-    }
-
-    @Test
-    void noDebePermitirCambiarDescripcionASoloEspacios() {
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
-
-        assertThrows(IllegalArgumentException.class, () -> solicitud.setDescripcion("   "));
-        assertEquals("Descripcion inicial", solicitud.getDescripcion());
-    }
-
-    @Test
     void noDebePermitirAsignarTecnicoNull() {
         Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
         Solicitud solicitud = new Solicitud(1L, cliente, "No deja escribir", EstadoSolicitud.ABIERTA);
@@ -144,15 +140,6 @@ public class SolicitudTest {
 
         assertThrows(IllegalStateException.class, () -> solicitud.asignarTecnico(tecnico2));
         assertEquals(tecnico1, solicitud.getTecnicoAsignado());
-    }
-
-    @Test
-    void noDebePermitirCambiarDescripcionANull() {
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Descripcion inicial", EstadoSolicitud.ABIERTA);
-
-        assertThrows(IllegalArgumentException.class, () -> solicitud.setDescripcion(null));
-        assertEquals("Descripcion inicial", solicitud.getDescripcion());
     }
 
     @Test

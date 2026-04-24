@@ -15,7 +15,7 @@ import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.SolicitudRepository;
 import com.mgcss.domain.Tecnico;
 
-public class ServicioSolicitudTest {
+class ServicioSolicitudTest {
 
     @Test
     void debeGuardarSolicitudCreadaEnRepositorio() {

@@ -9,6 +9,8 @@ import com.mgcss.domain.Tecnico;
 import com.mgcss.domain.SolicitudRepository;
 
 public class ServicioSolicitud {
+	
+	private static final String SOLICITUDNOENCONTRADA = "Solicitud no encontrada";
 
     private final SolicitudRepository repositorioSolicitud;	
 
@@ -23,7 +25,7 @@ public class ServicioSolicitud {
 
     public Solicitud asignarTecnico(Long solicitudId, Tecnico tecnico) {
         Solicitud solicitud = repositorioSolicitud.findById(solicitudId)
-                .orElseThrow(() -> new NoSuchElementException("Solicitud no encontrada"));
+                .orElseThrow(() -> new NoSuchElementException(SOLICITUDNOENCONTRADA));
 
         solicitud.asignarTecnico(tecnico);
         return repositorioSolicitud.save(solicitud);
@@ -31,7 +33,7 @@ public class ServicioSolicitud {
 
     public Solicitud cerrarSolicitud(Long solicitudId) {
         Solicitud solicitud = repositorioSolicitud.findById(solicitudId)
-                .orElseThrow(() -> new NoSuchElementException("Solicitud no encontrada"));
+                .orElseThrow(() -> new NoSuchElementException(SOLICITUDNOENCONTRADA));
 
         solicitud.cerrar();
         return repositorioSolicitud.save(solicitud);
@@ -39,7 +41,7 @@ public class ServicioSolicitud {
 
     public Solicitud reabrirSolicitud(Long solicitudId) {
         Solicitud solicitud = repositorioSolicitud.findById(solicitudId)
-                .orElseThrow(() -> new NoSuchElementException("Solicitud no encontrada"));
+                .orElseThrow(() -> new NoSuchElementException(SOLICITUDNOENCONTRADA));
 
         solicitud.reabrir();
         return repositorioSolicitud.save(solicitud);
