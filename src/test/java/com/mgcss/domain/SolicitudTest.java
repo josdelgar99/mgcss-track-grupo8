@@ -111,6 +111,7 @@ class SolicitudTest {
                 () -> new Solicitud(1L, cliente, null, EstadoSolicitud.ABIERTA));
     }
 
+
     @Test
     void noDebePermitirAsignarTecnicoNull() {
         Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
