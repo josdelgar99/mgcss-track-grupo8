@@ -73,8 +73,8 @@ public class Solicitud {
 
     public void asignarTecnico(Tecnico tecnico) {
         validarTecnico(tecnico);
-        validarNoCerrada();
-        validarSinTecnicoAsignado();
+        validarSolicitudAbierta();
+        validarTecnicoNoAsignado();
         tecnicoAsignado = tecnico;
     }
 
@@ -111,13 +111,13 @@ public class Solicitud {
         }
     }
 
-    private void validarNoCerrada() {
+    private void validarSolicitudAbierta() {
         if (estado == EstadoSolicitud.CERRADA) {
             throw new IllegalStateException("No se puede asignar un técnico a una solicitud cerrada");
         }
     }
 
-    private void validarSinTecnicoAsignado() {
+    private void validarTecnicoNoAsignado() {
         if (tecnicoAsignado != null) {
             throw new IllegalStateException("La solicitud ya tiene un técnico asignado");
         }
