@@ -167,7 +167,7 @@ class SolicitudTest {
     }
 
     @Test
-    void debePermitirReabrirSolicitudCerrada() {
+    void debePermitirReabrirSolicitudCerradaYPasarlaAEnProceso() {
         Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
         Solicitud solicitud = new Solicitud(1L, cliente, "Cerrada", EstadoSolicitud.EN_PROCESO);
         Tecnico tecnico = new Tecnico(1L, "Luis", "Hardware", true);
@@ -176,7 +176,27 @@ class SolicitudTest {
         solicitud.cerrar();
         solicitud.reabrir();
 
-        assertEquals(EstadoSolicitud.ABIERTA, solicitud.getEstado());
+        assertEquals(EstadoSolicitud.EN_PROCESO, solicitud.getEstado());
         assertNull(solicitud.getFechaCierre());
+    }
+    
+    @Test
+    void debeGuardarHistoricoEstadosEnOrdenCorrecto() {
+        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Fallo en el teclado", EstadoSolicitud.EN_PROCESO);
+        Tecnico tecnico = new Tecnico(1L, "Luis", "Hardware", true);
+
+        solicitud.asignarTecnico(tecnico);
+        solicitud.cerrar();
+        solicitud.reabrir();
+
+        assertEquals(
+            java.util.List.of(
+                EstadoSolicitud.EN_PROCESO,
+                EstadoSolicitud.CERRADA,
+                EstadoSolicitud.EN_PROCESO
+            ),
+            solicitud.getHistorialEstados()
+        );
     }
 }

@@ -1,6 +1,8 @@
 package com.mgcss.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Solicitud {
 
@@ -11,6 +13,7 @@ public class Solicitud {
     private Date fechaCreacion;
     private Date fechaCierre;
     private Tecnico tecnicoAsignado;
+    private final List<EstadoSolicitud> historialEstados = new ArrayList<>();
 
     public Solicitud() {
     }
@@ -23,9 +26,9 @@ public class Solicitud {
         this.id = id;
         this.cliente = cliente;
         this.descripcion = descripcion.trim();
-        this.estado = estado;
         this.fechaCreacion = new Date();
         this.fechaCierre = null;
+        cambiarEstado(estado);
     }
 
     public Long getId() {
@@ -61,13 +64,17 @@ public class Solicitud {
         return tecnicoAsignado;
     }
 
+    public List<EstadoSolicitud> getHistorialEstados() {
+        return List.copyOf(historialEstados);
+    }
+
     public boolean tienePrioridad() {
         return cliente != null && cliente.getEstado() == EstadoCliente.PREMIUM;
     }
 
     public void cerrar() {
         validarPuedeCerrar();
-        estado = EstadoSolicitud.CERRADA;
+        cambiarEstado(EstadoSolicitud.CERRADA);
         fechaCierre = new Date();
     }
 
@@ -80,8 +87,13 @@ public class Solicitud {
 
     public void reabrir() {
         validarPuedeReabrir();
-        estado = EstadoSolicitud.ABIERTA;
+        cambiarEstado(EstadoSolicitud.EN_PROCESO);
         fechaCierre = null;
+    }
+
+    private void cambiarEstado(EstadoSolicitud nuevoEstado) {
+        this.estado = nuevoEstado;
+        this.historialEstados.add(nuevoEstado);
     }
 
     private void validarCliente(Cliente cliente) {
