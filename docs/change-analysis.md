@@ -14,3 +14,12 @@ La clase principal a extender es `Solicitud`, ya que es la entidad central afect
 
 ## 5. ¿Qué impacto tiene en persistencia?
 De momento, se decide no persistir el histórico de estados y dejarlo documentado como decisión técnica. Esta decisión se justifica porque el requisito obliga a mantener el histórico en el modelo, pero no exige todavía almacenarlo en base de datos. Si en una iteración posterior fuera necesario persistirlo, habría que ampliar `SolicitudEntity`, adaptar el mapeo JPA y añadir tests de integración específicos para validar su almacenamiento.
+
+
+## Fase 4 - Impacto en persistencia
+
+De momento no se persiste el histórico de estados en base de datos. Se ha decidido mantenerlo como una estructura interna del dominio dentro de `Solicitud`, ya que el requisito funcional de esta fase exige registrar el histórico, pero no obliga a almacenarlo de forma persistente.
+
+Esta decisión reduce el impacto sobre la capa de infraestructura y evita modificar `SolicitudEntity`, el mapeo JPA y los tests de integración en esta iteración. Además, mantiene el cambio incremental y limita la complejidad introducida por la evolución del requisito.
+
+Si en una versión posterior fuera necesario persistir el histórico, será necesario ampliar la entidad de persistencia, adaptar el repositorio y añadir un test de integración específico para validar el almacenamiento correcto.
