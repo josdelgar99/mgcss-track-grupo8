@@ -16,3 +16,10 @@ Tras la refactorización realizada, las métricas han mejorado notablemente:
 - Code smells: 0
 - Debt ratio: 0,0%
 - Deuda técnica estimada: 0
+Actualmente tenemos 3 ramas distintas:
+
+- main: es la rama principal del proyecto hacia la que hacemos merge con todos los cambios que se van implementando
+- feature/reopen-and-history: Implementación de los cambios produciodos por el cambio de opinión del cliente.
+- feature/Snapshot-Before-Refactor: Proyecto antes de que se empiecen con las refactorizaciones.
+- feature/Estructura-Complejidad-Refactor: Implementación de las diversas refactorizaciones necesarias basadas en las métricas del Soanr
+- feature/workflow: Se creó para crear el build/test con el archivo .yml
