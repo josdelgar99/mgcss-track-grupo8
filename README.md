@@ -3,7 +3,16 @@
 
 # mgcss-track-grupo8
 
-Hemos creado 3 ramas distintas:
+Antes de comenzar la refactorización, el proyecto presentaba las siguientes métricas:
 
-- feature/estructura-inicial: Se creó para poder hacer el primer commit de la estructura del proyecto. El readme se actualiza desde aquí
-- feature/workflow: Se creó para crear el build/test con el archivo .yml
+- Complejidad ciclomática: 67
+- Code smells: 6
+- Debt ratio: 0,2%
+- Deuda técnica estimada: 26 min
+
+Tras la refactorización realizada, las métricas han mejorado notablemente:
+
+- Sonar no da complejidad ciclomática
+- Code smells: 0
+- Debt ratio: 0,0%
+- Deuda técnica estimada: 0
