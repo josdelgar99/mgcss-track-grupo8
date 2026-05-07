@@ -3,8 +3,23 @@
 
 # mgcss-track-grupo8
 
+Antes de comenzar la refactorización, el proyecto presentaba las siguientes métricas:
+
+- Complejidad ciclomática: 67
+- Code smells: 6
+- Debt ratio: 0,2%
+- Deuda técnica estimada: 26 min
+
+Tras la refactorización realizada, las métricas han mejorado notablemente:
+
+- Sonar no da complejidad ciclomática
+- Code smells: 0
+- Debt ratio: 0,0%
+- Deuda técnica estimada: 0
 Actualmente tenemos 3 ramas distintas:
 
 - main: es la rama principal del proyecto hacia la que hacemos merge con todos los cambios que se van implementando
-- feature/Estructura-Mockito: Implementación mas completa del proyecto actualmente, incluyendo los tests con Mockito
+- feature/reopen-and-history: Implementación de los cambios produciodos por el cambio de opinión del cliente.
+- feature/Snapshot-Before-Refactor: Proyecto antes de que se empiecen con las refactorizaciones.
+- feature/Estructura-Complejidad-Refactor: Implementación de las diversas refactorizaciones necesarias basadas en las métricas del Soanr
 - feature/workflow: Se creó para crear el build/test con el archivo .yml

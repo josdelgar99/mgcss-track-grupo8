@@ -115,7 +115,7 @@ class ServicioSolicitudTest {
         
         Solicitud resultado = servicio.reabrirSolicitud(1L);
         
-        assertEquals(EstadoSolicitud.ABIERTA, resultado.getEstado());
+        assertEquals(EstadoSolicitud.EN_PROCESO, resultado.getEstado());
         verify(repository).save(solicitud);
     }
 }
