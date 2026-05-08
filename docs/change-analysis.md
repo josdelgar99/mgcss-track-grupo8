@@ -23,3 +23,11 @@ De momento no se persiste el histórico de estados en base de datos. Se ha decid
 Esta decisión reduce el impacto sobre la capa de infraestructura y evita modificar `SolicitudEntity`, el mapeo JPA y los tests de integración en esta iteración. Además, mantiene el cambio incremental y limita la complejidad introducida por la evolución del requisito.
 
 Si en una versión posterior fuera necesario persistir el histórico, será necesario ampliar la entidad de persistencia, adaptar el repositorio y añadir un test de integración específico para validar el almacenamiento correcto.
+
+## Fase 5 - Revisión de métricas
+
+El análisis de Sonar identificó a `Solicitud` como la clase más compleja del proyecto, con una complejidad ciclomática de 36. Esta complejidad refleja la acumulación de responsabilidades de dominio en una sola clase: validación de datos, asignación de técnico, cambios de estado, gestión de fechas y registro del histórico.
+
+Para mejorar la mantenibilidad se aplicó una refactorización incremental centrada en simplificar la lógica de transición de estados y agrupar validaciones relacionadas en métodos privados más expresivos. La técnica utilizada fue principalmente `Extract Method`, junto con `Rename for clarity` y encapsulación de lógica repetida.
+
+Esta refactorización no modifica el comportamiento observable, pero deja la clase mejor estructurada, más fácil de leer y más preparada para futuros cambios en el modelo de estados. Además, reduce el riesgo de introducir errores al modificar reglas de negocio relacionadas con reapertura, cierre o histórico.
