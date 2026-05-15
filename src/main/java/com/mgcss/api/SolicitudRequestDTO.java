@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class SolicitudRequestDTO {
 	
-	@NotBlank(message = "Debes indicar una descripción para la solicitud")
+	@NotBlank(message = "Debes indicar una descripción en la solicitud")
     private String descripcion;
 
     public SolicitudRequestDTO() {
