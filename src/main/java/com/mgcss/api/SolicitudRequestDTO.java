@@ -7,9 +7,7 @@ public class SolicitudRequestDTO {
 	@NotBlank(message = "Debes indicar una descripción en la solicitud")
     private String descripcion;
 
-    public SolicitudRequestDTO() {
-    	
-    }
+    public SolicitudRequestDTO() {}
 
     public SolicitudRequestDTO(String descripcion) {
         this.descripcion = descripcion;
