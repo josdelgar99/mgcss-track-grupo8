@@ -19,16 +19,14 @@ public class Solicitud {
     }
 
     public Solicitud(Long id, Cliente cliente, String descripcion, EstadoSolicitud estado) {
-        validarCliente(cliente);
-        validarDescripcion(descripcion);
-        validarEstado(estado);
+    	validarDatosObligatorios(cliente, descripcion, estado);
 
         this.id = id;
         this.cliente = cliente;
         this.descripcion = descripcion.trim();
         this.fechaCreacion = new Date();
         this.fechaCierre = null;
-        cambiarEstado(estado);
+        RegistrarEstadoInicial(estado);
     }
 
     public Long getId() {
@@ -73,27 +71,72 @@ public class Solicitud {
     }
 
     public void cerrar() {
-        validarPuedeCerrar();
+        validarCierrePermitido();
         cambiarEstado(EstadoSolicitud.CERRADA);
-        fechaCierre = new Date();
+        registrarFechaCierre();
     }
 
     public void asignarTecnico(Tecnico tecnico) {
-        validarTecnico(tecnico);
-        validarSolicitudAbierta();
-        validarTecnicoNoAsignado();
+        validarTecnicoAsignable(tecnico);
         tecnicoAsignado = tecnico;
     }
 
     public void reabrir() {
-        validarPuedeReabrir();
+        validarReaperturaPermitida();
         cambiarEstado(EstadoSolicitud.EN_PROCESO);
-        fechaCierre = null;
+        limpiarFechaCierre();
+    }
+    
+    public void RegistrarEstadoInicial(EstadoSolicitud estadoInicial) {
+    	cambiarEstado(estadoInicial);
     }
 
     private void cambiarEstado(EstadoSolicitud nuevoEstado) {
         this.estado = nuevoEstado;
         this.historialEstados.add(nuevoEstado);
+    }
+    
+    private void registrarFechaCierre() {
+        this.fechaCierre = new Date();
+    }
+
+    private void limpiarFechaCierre() {
+        this.fechaCierre = null;
+    }
+    
+    private void validarDatosObligatorios(Cliente cliente, String descripcion, EstadoSolicitud estado) {
+        validarCliente(cliente);
+        validarDescripcion(descripcion);
+        validarEstado(estado);
+    }
+
+    private void validarTecnicoAsignable(Tecnico tecnico) {
+        validarTecnico(tecnico);
+        validarSolicitudAbierta();
+        validarTecnicoNoAsignado();
+    }
+
+    private void validarCierrePermitido() {
+        validarEstadoEnProceso();
+        validarTecnicoAsignado();
+    }
+
+    private void validarReaperturaPermitida() {
+        if (estado != EstadoSolicitud.CERRADA) {
+            throw new IllegalStateException("Solo se puede reabrir una solicitud cerrada");
+        }
+    }
+    
+    private void validarEstadoEnProceso() {
+        if (estado != EstadoSolicitud.EN_PROCESO) {
+            throw new IllegalStateException("Sólo se podría cerrar la solicitud que está EN_PROCESO");
+        }
+    }
+
+    private void validarTecnicoAsignado() {
+        if (tecnicoAsignado == null) {
+            throw new IllegalStateException("No se puede cerrar una solicitud sin técnico asignado");
+        }
     }
 
     private void validarCliente(Cliente cliente) {
@@ -132,21 +175,6 @@ public class Solicitud {
     private void validarTecnicoNoAsignado() {
         if (tecnicoAsignado != null) {
             throw new IllegalStateException("La solicitud ya tiene un técnico asignado");
-        }
-    }
-
-    private void validarPuedeCerrar() {
-        if (estado != EstadoSolicitud.EN_PROCESO) {
-            throw new IllegalStateException("Sólo se podría cerrar la solicitud que está EN_PROCESO");
-        }
-        if (tecnicoAsignado == null) {
-            throw new IllegalStateException("No se puede cerrar una solicitud sin técnico asignado");
-        }
-    }
-
-    private void validarPuedeReabrir() {
-        if (estado != EstadoSolicitud.CERRADA) {
-            throw new IllegalStateException("Solo se puede reabrir una solicitud cerrada");
         }
     }
 }
