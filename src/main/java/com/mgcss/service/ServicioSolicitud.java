@@ -1,6 +1,7 @@
 package com.mgcss.service;
 
 import java.util.NoSuchElementException;
+import org.springframework.stereotype.Service;
 
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.EstadoSolicitud;
@@ -8,6 +9,7 @@ import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.SolicitudRepository;
 import com.mgcss.domain.Tecnico;
 
+@Service
 public class ServicioSolicitud {
 
     private static final String SOLICITUDNOENCONTRADA = "Solicitud no encontrada";

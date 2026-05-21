@@ -1,7 +1,9 @@
 package com.mgcss.api;
 
 import com.mgcss.domain.Solicitud;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SolicitudMapper {
 
     public SolicitudResponseDTO toResponseDTO(Solicitud solicitud) {
