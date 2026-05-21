@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 public class SolicitudEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
