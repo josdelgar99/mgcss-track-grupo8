@@ -9,6 +9,12 @@ import jakarta.validation.Valid;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.service.ServicioSolicitud;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+
 
 @RestController
 @RequestMapping("/api/solicitudes")
@@ -24,6 +30,15 @@ public class SolicitudController {
         this.servicioSolicitud = servicioSolicitud;
         this.solicitudMapper = solicitudMapper;
     }
+    
+    @Operation(
+            summary = "Crear una solicitud",
+            description = "Registra una nueva solicitud de servicio en estado ABIERTA"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Solicitud creada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    })
     
     @PostMapping
     public ResponseEntity<SolicitudResponseDTO> crearSolicitud(
