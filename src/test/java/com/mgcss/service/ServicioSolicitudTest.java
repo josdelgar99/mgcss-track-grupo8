@@ -85,7 +85,7 @@ class ServicioSolicitudTest {
     @Test
     void debeCerrarSolicitudExistente() {
         Cliente cliente = new Cliente(1L, "Pepe", "pepe@test.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.ABIERTA);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.EN_PROCESO);
 
         when(repositorioSolicitud.findById(1L)).thenReturn(Optional.of(solicitud));
         when(repositorioSolicitud.save(any(Solicitud.class)))
@@ -111,7 +111,7 @@ class ServicioSolicitudTest {
         Solicitud resultado = servicioSolicitud.reabrirSolicitud(1L);
 
         assertThat(resultado).isNotNull();
-        assertThat(resultado.getEstado()).isEqualTo(EstadoSolicitud.ABIERTA);
+        assertThat(resultado.getEstado()).isEqualTo(EstadoSolicitud.EN_PROCESO);
         verify(repositorioSolicitud).findById(1L);
         verify(repositorioSolicitud).save(solicitud);
     }
