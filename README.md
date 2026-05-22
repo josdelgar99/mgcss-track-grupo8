@@ -17,8 +17,9 @@ Tras la refactorización realizada, las métricas han mejorado notablemente:
 - Debt ratio: 0,0%
 - Deuda técnica estimada: 0
 
-Actualmente tenemos 4 ramas distintas:
+Actualmente tenemos 5 ramas distintas:
 - main: Es la rama principal del proyecto hacia la que hacemos merge con todos los cambios que se van implementando.
-- feature/Estructura-API: Es la rama donde vamos a implementar la API en base a lo que se nos indica en la sesión 10.
-- feature/reopen-and-history: Implementación de los cambios produciodos por el cambio de opinión del cliente.
+- feature/apio-dto-contract: Es la rama en la que trabajo Apio la parte de los DTOs. (El docker también se hizo en esta rama)
+- feature/madro-rest-controller: Es la rama en la que trabaja Madro la parte de Controllers.
+- feature/jose-tests-docs-docker: Es la rama en la que trabaja Jose la parte de los Tests.
 - feature/workflow: Se creó para crear el build/test con el archivo .yml
