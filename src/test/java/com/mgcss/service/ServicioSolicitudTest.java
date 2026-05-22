@@ -13,12 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.mgcss.domain.Cliente;
-import com.mgcss.domain.EstadoCliente;
-import com.mgcss.domain.EstadoSolicitud;
-import com.mgcss.domain.Solicitud;
-import com.mgcss.domain.SolicitudRepository;
-import com.mgcss.domain.Tecnico;
+import com.mgcss.domain.*;
 
 class ServicioSolicitudTest {
 
