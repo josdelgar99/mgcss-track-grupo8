@@ -1,13 +1,11 @@
 package com.mgcss.service;
 
 import java.util.NoSuchElementException;
+import org.springframework.stereotype.Service;
 
-import com.mgcss.domain.Cliente;
-import com.mgcss.domain.EstadoSolicitud;
-import com.mgcss.domain.Solicitud;
-import com.mgcss.domain.SolicitudRepository;
-import com.mgcss.domain.Tecnico;
+import com.mgcss.domain.*;
 
+@Service
 public class ServicioSolicitud {
 
     private static final String SOLICITUDNOENCONTRADA = "Solicitud no encontrada";
@@ -16,6 +14,25 @@ public class ServicioSolicitud {
 
     public ServicioSolicitud(SolicitudRepository repositorioSolicitud) {
         this.repositorioSolicitud = repositorioSolicitud;
+    }
+    
+    public Solicitud crearSolicitud(String descripcion) {
+
+        Cliente clienteDummy =
+                new Cliente(
+                        1L,
+                        "Cliente API",
+                        "api@test.com",
+                        EstadoCliente.STANDARD);
+
+        Solicitud solicitud =
+                new Solicitud(
+                        null,
+                        clienteDummy,
+                        descripcion,
+                        EstadoSolicitud.ABIERTA);
+
+        return repositorioSolicitud.save(solicitud);
     }
 
     public Solicitud crearSolicitud(Long id, Cliente cliente, String descripcion) {
