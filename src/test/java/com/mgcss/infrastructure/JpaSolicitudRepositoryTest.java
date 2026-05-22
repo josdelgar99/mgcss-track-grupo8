@@ -19,14 +19,11 @@ class JpaSolicitudRepositoryTest {
 
     @Test
     void debeGuardarYRecuperarSolicitud() {
-        // Arrange
-        SolicitudEntity entity = new SolicitudEntity(1L, "Pantalla rota", EstadoSolicitud.ABIERTA);
+        SolicitudEntity entity = new SolicitudEntity(null, "Pantalla rota", EstadoSolicitud.ABIERTA);
 
-        // Act
-        repository.save(entity);
-        var resultado = repository.findById(1L);
+        SolicitudEntity guardada = repository.save(entity);
+        var resultado = repository.findById(guardada.getId());
 
-        // Assert
         assertThat(resultado).isPresent();
         assertThat(resultado.get().getDescripcion()).isEqualTo("Pantalla rota");
         assertThat(resultado.get().getEstado()).isEqualTo(EstadoSolicitud.ABIERTA);
