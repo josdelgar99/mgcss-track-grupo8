@@ -85,7 +85,7 @@ class ServicioSolicitudTest {
     @Test
     void debeCerrarSolicitudExistente() {
         Cliente cliente = new Cliente(1L, "Pepe", "pepe@test.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.ABIERTA);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.EN_PROCESO);
         Tecnico tecnico = new Tecnico(3L, "Luis", "Hardware", true);
 
         solicitud.asignarTecnico(tecnico);
