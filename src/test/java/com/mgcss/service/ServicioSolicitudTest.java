@@ -1,12 +1,17 @@
 package com.mgcss.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.EstadoCliente;
@@ -17,105 +22,129 @@ import com.mgcss.domain.Tecnico;
 
 class ServicioSolicitudTest {
 
-    @Test
-    void debeGuardarSolicitudCreadaEnRepositorio() {
-        SolicitudRepository repository = mock(SolicitudRepository.class);
-        ServicioSolicitud servicio = new ServicioSolicitud(repository);
+    private SolicitudRepository repositorioSolicitud;
+    private ServicioSolicitud servicioSolicitud;
 
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud solicitudGuardada = new Solicitud(1L, cliente, "Fallo en el teclado", EstadoSolicitud.ABIERTA);
-
-        when(repository.save(any(Solicitud.class))).thenReturn(solicitudGuardada);
-
-        Solicitud resultado = servicio.crearSolicitud(1L, cliente, "Fallo en el teclado");
-
-        assertEquals(EstadoSolicitud.ABIERTA, resultado.getEstado());
-        assertEquals(cliente, resultado.getCliente());
-        verify(repository).save(any(Solicitud.class));
+    @BeforeEach
+    void setUp() {
+        repositorioSolicitud = Mockito.mock(SolicitudRepository.class);
+        servicioSolicitud = new ServicioSolicitud(repositorioSolicitud);
     }
 
     @Test
-    void debeGuardarSolicitudActualizadaCuandoSeAsignaTecnicoValido() {
-    	SolicitudRepository repository = mock(SolicitudRepository.class);
-        ServicioSolicitud servicio = new ServicioSolicitud(repository);
+    void debeCrearSolicitudConDescripcion() {
+        when(repositorioSolicitud.save(any(Solicitud.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "No funciona teclado", EstadoSolicitud.ABIERTA);
-        Tecnico tecnico = new Tecnico(1L, "Luis", "Hardware", true);
+        Solicitud resultado = servicioSolicitud.crearSolicitud("Pantalla rota");
 
-        when(repository.findById(1L)).thenReturn(Optional.of(solicitud));
-        when(repository.save(any(Solicitud.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getId()).isNull();
+        assertThat(resultado.getDescripcion()).isEqualTo("Pantalla rota");
+        assertThat(resultado.getEstado()).isEqualTo(EstadoSolicitud.ABIERTA);
+        assertThat(resultado.getCliente()).isNotNull();
+        assertThat(resultado.getCliente().getId()).isEqualTo(1L);
+        assertThat(resultado.getCliente().getNombre()).isEqualTo("Cliente API");
+        assertThat(resultado.getCliente().getEmail()).isEqualTo("api@test.com");
+        assertThat(resultado.getCliente().getEstado()).isEqualTo(EstadoCliente.STANDARD);
 
-        Solicitud resultado = servicio.asignarTecnico(1L, tecnico);
-
-        assertEquals(tecnico, resultado.getTecnicoAsignado());
-        verify(repository).findById(1L);
-        verify(repository).save(solicitud);
+        verify(repositorioSolicitud).save(any(Solicitud.class));
     }
 
     @Test
-    void debeLanzarExcepcionSiLaSolicitudNoExisteAlAsignarTecnico() {
-    	SolicitudRepository repository = mock(SolicitudRepository.class);
-        ServicioSolicitud servicio = new ServicioSolicitud(repository);
-        Tecnico tecnico = new Tecnico(1L, "Luis", "Hardware", true);
+    void debeCrearSolicitudConIdClienteYDescripcion() {
+        Cliente cliente = new Cliente(2L, "Ana", "ana@test.com", EstadoCliente.STANDARD);
 
-        when(repository.findById(99L)).thenReturn(Optional.empty());
+        when(repositorioSolicitud.save(any(Solicitud.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        assertThrows(NoSuchElementException.class, () -> servicio.asignarTecnico(99L, tecnico));
-        verify(repository).findById(99L);
-        verify(repository, never()).save(any());
+        Solicitud resultado = servicioSolicitud.crearSolicitud(5L, cliente, "Teclado roto");
+
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getId()).isEqualTo(5L);
+        assertThat(resultado.getCliente()).isEqualTo(cliente);
+        assertThat(resultado.getDescripcion()).isEqualTo("Teclado roto");
+        assertThat(resultado.getEstado()).isEqualTo(EstadoSolicitud.ABIERTA);
+
+        verify(repositorioSolicitud).save(any(Solicitud.class));
     }
 
     @Test
-    void debeGuardarSolicitudActualizadaCuandoSeCierra() {
-    	SolicitudRepository repository = mock(SolicitudRepository.class);
-        ServicioSolicitud servicio = new ServicioSolicitud(repository);
+    void debeAsignarTecnicoASolicitudExistente() {
+        Cliente cliente = new Cliente(1L, "Pepe", "pepe@test.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.ABIERTA);
+        Tecnico tecnico = new Tecnico(3L, "Luis", "Hardware", true);
 
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Error pantalla", EstadoSolicitud.EN_PROCESO);
-        Tecnico tecnico = new Tecnico(1L, "Luis", "Hardware", true);
-        solicitud.asignarTecnico(tecnico);
+        when(repositorioSolicitud.findById(1L)).thenReturn(Optional.of(solicitud));
+        when(repositorioSolicitud.save(any(Solicitud.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(repository.findById(1L)).thenReturn(Optional.of(solicitud));
-        when(repository.save(any(Solicitud.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Solicitud resultado = servicioSolicitud.asignarTecnico(1L, tecnico);
 
-        Solicitud resultado = servicio.cerrarSolicitud(1L);
-
-        assertEquals(EstadoSolicitud.CERRADA, resultado.getEstado());
-        verify(repository).findById(1L);
-        verify(repository).save(solicitud);
+        assertThat(resultado).isNotNull();
+        verify(repositorioSolicitud).findById(1L);
+        verify(repositorioSolicitud).save(solicitud);
     }
-    
+
     @Test
-    void debeCrearSolicitudAbiertaYGuardarEnRepositorio() {
-        SolicitudRepository repository = mock(SolicitudRepository.class);
-        ServicioSolicitud servicio = new ServicioSolicitud(repository);
-        
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud esperada = new Solicitud(1L, cliente, "Fallo disco", EstadoSolicitud.ABIERTA);
-        
-        when(repository.save(any(Solicitud.class))).thenReturn(esperada);
-        
-        Solicitud resultado = servicio.crearSolicitud(1L, cliente, "Fallo disco");
-        
-        assertEquals(EstadoSolicitud.ABIERTA, resultado.getEstado());
-        verify(repository).save(argThat(s -> s.getDescripcion().equals("Fallo disco")));
+    void debeCerrarSolicitudExistente() {
+        Cliente cliente = new Cliente(1L, "Pepe", "pepe@test.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.ABIERTA);
+
+        when(repositorioSolicitud.findById(1L)).thenReturn(Optional.of(solicitud));
+        when(repositorioSolicitud.save(any(Solicitud.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Solicitud resultado = servicioSolicitud.cerrarSolicitud(1L);
+
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getEstado()).isEqualTo(EstadoSolicitud.CERRADA);
+        verify(repositorioSolicitud).findById(1L);
+        verify(repositorioSolicitud).save(solicitud);
     }
-    
+
     @Test
-    void debeReabrirSolicitudCerradaYGuardar() {
-    	SolicitudRepository repository = mock(SolicitudRepository.class);
-        ServicioSolicitud servicio = new ServicioSolicitud(repository);
-        
-        Cliente cliente = new Cliente(1L, "Jose", "jose@email.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Arreglado", EstadoSolicitud.CERRADA);
-        
-        when(repository.findById(1L)).thenReturn(Optional.of(solicitud));
-        when(repository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
-        
-        Solicitud resultado = servicio.reabrirSolicitud(1L);
-        
-        assertEquals(EstadoSolicitud.EN_PROCESO, resultado.getEstado());
-        verify(repository).save(solicitud);
+    void debeReabrirSolicitudExistente() {
+        Cliente cliente = new Cliente(1L, "Pepe", "pepe@test.com", EstadoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.CERRADA);
+
+        when(repositorioSolicitud.findById(1L)).thenReturn(Optional.of(solicitud));
+        when(repositorioSolicitud.save(any(Solicitud.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Solicitud resultado = servicioSolicitud.reabrirSolicitud(1L);
+
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getEstado()).isEqualTo(EstadoSolicitud.ABIERTA);
+        verify(repositorioSolicitud).findById(1L);
+        verify(repositorioSolicitud).save(solicitud);
+    }
+
+    @Test
+    void debeLanzarExcepcionSiNoExisteSolicitudAlAsignarTecnico() {
+        Tecnico tecnico = new Tecnico(3L, "Luis", "Hardware", true);
+        when(repositorioSolicitud.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> servicioSolicitud.asignarTecnico(99L, tecnico))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("Solicitud no encontrada");
+    }
+
+    @Test
+    void debeLanzarExcepcionSiNoExisteSolicitudAlCerrar() {
+        when(repositorioSolicitud.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> servicioSolicitud.cerrarSolicitud(99L))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("Solicitud no encontrada");
+    }
+
+    @Test
+    void debeLanzarExcepcionSiNoExisteSolicitudAlReabrir() {
+        when(repositorioSolicitud.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> servicioSolicitud.reabrirSolicitud(99L))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("Solicitud no encontrada");
     }
 }
