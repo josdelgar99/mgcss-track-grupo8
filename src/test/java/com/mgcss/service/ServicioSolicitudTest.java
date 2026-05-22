@@ -85,7 +85,10 @@ class ServicioSolicitudTest {
     @Test
     void debeCerrarSolicitudExistente() {
         Cliente cliente = new Cliente(1L, "Pepe", "pepe@test.com", EstadoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.EN_PROCESO);
+        Solicitud solicitud = new Solicitud(1L, cliente, "Pantalla rota", EstadoSolicitud.ABIERTA);
+        Tecnico tecnico = new Tecnico(3L, "Luis", "Hardware", true);
+
+        solicitud.asignarTecnico(tecnico);
 
         when(repositorioSolicitud.findById(1L)).thenReturn(Optional.of(solicitud));
         when(repositorioSolicitud.save(any(Solicitud.class)))
