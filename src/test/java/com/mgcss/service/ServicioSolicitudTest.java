@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 
 import com.mgcss.domain.*;
 
+
 class ServicioSolicitudTest {
 
     private SolicitudRepository repositorioSolicitud;
