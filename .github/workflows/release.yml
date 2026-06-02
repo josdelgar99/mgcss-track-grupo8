@@ -30,7 +30,7 @@ jobs:
 
       - name: Rename artifact
         run: |
-          cp target/*.jar target/app-${{ github.ref_name }}.jar
+          cp target/mgcss-track-grupo8-0.0.1-SNAPCHOT.jar target/app-${{ github.ref_name }}.jar
 
       - name: Build Docker image
         run: |
