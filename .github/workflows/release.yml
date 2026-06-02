@@ -3,10 +3,45 @@ name: Release pipeline
 on:
   push:
     tags:
-      - '**'
+      - 'v*'
+
+permissions:
+  contents: write
 
 jobs:
-  test:
+  release:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "workflow detected"
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Build
+        run: mvn clean package
+
+      - name: Rename artifact
+        run: |
+          mkdir -p release
+          cp target/*.jar release/app-${{ github.ref_name }}.jar
+
+      - name: Build Docker image
+        run: |
+          docker build -t mgcss-track:${{ github.ref_name }} .
+
+      - name: Create release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: release/app-${{ github.ref_name }}.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
