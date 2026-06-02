@@ -8,3 +8,8 @@ Al final, el workflow crea la release en GitHub y sube el `.jar` como archivo ad
 
 ## Fase 4
 Hemos verificado la trazabilidad completa del proceso de release. Al crear y subir un nuevo tag, GitHub Actions ejecuta correctamente el workflow `release.yml`, compila el proyecto, genera el artefacto, construye la imagen Docker y publica la release con el `.jar` adjunto como asset.
+
+## Fase 5
+Tras verificar el workflow de release con un nuevo tag, confirmamos que el proceso automático funciona correctamente. Al hacer push del tag, GitHub Actions ejecuta el workflow, compila el proyecto, genera el artefacto `.jar`, construye la imagen Docker y publica la release con el archivo adjunto como asset.
+
+Con esto damos por validado el flujo completo de publicación y trazabilidad de versiones en el repositorio.
