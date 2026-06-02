@@ -7,8 +7,7 @@ public class AsignarTecnicoRequestDTO {
     @NotNull(message = "Debes indicar el identificador del técnico")
     private Long tecnicoId;
 
-    public AsignarTecnicoRequestDTO() {
-    }
+    public AsignarTecnicoRequestDTO() {}
 
     public AsignarTecnicoRequestDTO(Long tecnicoId) {
         this.tecnicoId = tecnicoId;
