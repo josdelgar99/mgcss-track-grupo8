@@ -5,3 +5,6 @@ Hemos creado un workflow nuevo llamado `release.yml` para automatizar las releas
 El workflow hace checkout del código, prepara Java 17 con Maven y compila el proyecto para generar el `.jar`. Después renombra el artefacto con la versión correspondiente y construye la imagen Docker.
 
 Al final, el workflow crea la release en GitHub y sube el `.jar` como archivo adjunto. Con esto dejamos el proceso bastante automatizado y la versión queda trazada desde el tag hasta el artefacto final.
+
+## Fase 4
+Hemos verificado la trazabilidad completa del proceso de release. Al crear y subir un nuevo tag, GitHub Actions ejecuta correctamente el workflow `release.yml`, compila el proyecto, genera el artefacto, construye la imagen Docker y publica la release con el `.jar` adjunto como asset.
