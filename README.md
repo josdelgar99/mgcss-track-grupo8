@@ -3,23 +3,19 @@
 
 # mgcss-track-grupo8
 
-Antes de comenzar la refactorización, el proyecto presentaba las siguientes métricas:
+Métricas anteriores:
 
 - Complejidad ciclomática: 67
 - Code smells: 6
 - Debt ratio: 0,2%
 - Deuda técnica estimada: 26 min
 
-Tras la refactorización realizada, las métricas han mejorado notablemente:
+Métricas finales:
+- Se encuentran en un documento en la carpeta docs.
 
-- Sonar no da complejidad ciclomática
-- Code smells: 0
-- Debt ratio: 0,0%
-- Deuda técnica estimada: 0
+Memoria Ténica:
+- Se encuentra en un PDF a parte.
 
-Actualmente tenemos 5 ramas distintas:
+Actualmente tenemos 1 rama:
 - main: Es la rama principal del proyecto hacia la que hacemos merge con todos los cambios que se van implementando.
-- feature/apio-dto-contract: Es la rama en la que trabajo Apio la parte de los DTOs. (El docker también se hizo en esta rama)
-- feature/madro-rest-controller: Es la rama en la que trabaja Madro la parte de Controllers.
-- feature/jose-tests-docs-docker: Es la rama en la que trabaja Jose la parte de los Tests.
-- feature/workflow: Se creó para crear el build/test con el archivo .yml
+
